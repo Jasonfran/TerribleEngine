@@ -2,7 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using TerribleEngine.Attributes;
 using TerribleEngine.ComponentModels;
+using TerribleEngine.Enums;
 
 namespace TerribleEngine.ECS
 {
@@ -22,6 +24,8 @@ namespace TerribleEngine.ECS
         // Entity to component mapping
         private readonly ConcurrentDictionary<Entity, Dictionary<Type, IComponent>> _entityComponents;
 
+        private readonly Dictionary<DependsOnComponents, List<ITerribleSystem>> _systemsToNotify;
+
         private int _entityIdCounter;
         
         public EntityManager(ISystemManager systemManager)
@@ -31,6 +35,8 @@ namespace TerribleEngine.ECS
             _entitiesWithComponentSet = new ConcurrentDictionary<ComponentSet, List<Entity>>();
             _entitiesWithComponent = new ConcurrentDictionary<Type, List<Entity>>();
             _entityComponents = new ConcurrentDictionary<Entity, Dictionary<Type, IComponent>>();
+
+            _systemsToNotify = new Dictionary<DependsOnComponents, List<ITerribleSystem>>();
         }
 
         public Entity NewEntity()
@@ -73,10 +79,36 @@ namespace TerribleEngine.ECS
             ChangeEntityComponentSet(entity, newComponentSet);
         }
 
+        public T GetComponent<T>(Entity entity) where T : IComponent
+        {
+            if (entity.HasComponent<T>())
+            {
+                return (T) _entityComponents[entity][typeof(T)];
+            }
+
+            return default(T);
+        }
+
         public bool HasComponent<T>(Entity entity) where T : IComponent
         {
             var type = typeof(T);
             return entity.ComponentSet.ComponentTypes.Contains(type);
+        }
+
+        internal void RegisterSystem(ITerribleSystem system)
+        {
+            var dependsOn = system.GetDependencies();
+            if (!_systemsToNotify.ContainsKey(dependsOn))
+            {
+                _systemsToNotify.Add(dependsOn, new List<ITerribleSystem>());
+            }
+
+            _systemsToNotify[dependsOn].Add(system);
+        }
+
+        internal void UnregisterSystem(ITerribleSystem system)
+        {
+            _systemsToNotify[system.GetDependencies()].Remove(system);
         }
 
         private int GetEntityId()
@@ -116,21 +148,38 @@ namespace TerribleEngine.ECS
             AddToSystems(entity);
         }
 
+        private List<ITerribleSystem> SystemsWhichSatisfy(ComponentSet componentSet)
+        {
+            var systems = new List<ITerribleSystem>();
+            foreach (var kv in _systemsToNotify)
+            {
+                var systemComponentSet = kv.Key.RequiredTypes.ComponentTypes;
+                if (!systemComponentSet.Except(componentSet.ComponentTypes).Any())
+                {
+                    systems.AddRange(kv.Value);
+                }
+            }
+
+            return systems;
+        }
+
         private void AddToSystems(Entity entity)
         {
-            var systems = _systemManager.SystemsWhichSatisfy(entity.ComponentSet);
+            var systems = SystemsWhichSatisfy(entity.ComponentSet);
             foreach (var system in systems)
             {
-                system.Entities.Add(entity);
+                var terribleSystem = system as TerribleSystem;
+                terribleSystem?.CollectionUpdate(entity, EntityCollectionChange.Added);
             }
         }
 
         private void RemoveFromSystems(Entity entity)
         {
-            var systems = _systemManager.SystemsWhichSatisfy(entity.ComponentSet);
+            var systems = SystemsWhichSatisfy(entity.ComponentSet);
             foreach (var system in systems)
             {
-                system.Entities.Remove(entity);
+                var terribleSystem = system as TerribleSystem;
+                terribleSystem?.CollectionUpdate(entity, EntityCollectionChange.Removed);
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TerribleEngine.Attributes;
 using TerribleEngine.Resources;
+using TerribleEngine.Scene;
 
 namespace TerribleEngine.ECS
 {
@@ -11,9 +12,11 @@ namespace TerribleEngine.ECS
         EventManager EventManager { get; set; }
         IResourceManager ResourceManager { get; set; }
 
+        IWorld World { get; set; }
+
         DependsOnComponents GetDependencies();
         void OnExit();
         void OnInit();
-        void Update();
+        void Update(float dt);
     }
 }

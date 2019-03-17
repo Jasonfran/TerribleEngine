@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using TerribleEngine.Attributes;
 using TerribleEngine.Resources;
+using TerribleEngine.Scene;
 
 namespace TerribleEngine.ECS
 {
@@ -24,22 +25,25 @@ namespace TerribleEngine.ECS
             systemLoader.LoadSystems(this);
         }
 
-        public void InitialiseSystems(EntityManager entityManager, EventManager eventManager, IResourceManager resourceManager)
+        public void InitialiseSystems(EntityManager entityManager, EventManager eventManager, IResourceManager resourceManager, IWorld world)
         {
             foreach (var system in _systems)
             {
                 system.EntityManager = entityManager;
                 system.EventManager = eventManager;
                 system.ResourceManager = resourceManager;
+                system.World = world;
+
+                entityManager.RegisterSystem(system);
                 system.OnInit();
             }
         }
 
-        public void UpdateSystems()
+        public void UpdateSystems(float dt)
         {
             foreach (var system in _systems)
             {
-                system.Update();
+                system.Update(dt);
             }
         }
 
@@ -51,7 +55,6 @@ namespace TerribleEngine.ECS
         public void AddSystem(ITerribleSystem system)
         {
             var dependencies = system.GetDependencies();
-            if (dependencies == null) return;
 
             if (!_systemDependencies.ContainsKey(dependencies))
             {

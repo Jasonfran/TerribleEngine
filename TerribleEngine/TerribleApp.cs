@@ -4,6 +4,7 @@ using TerribleEngine.ECS;
 using TerribleEngine.Enums;
 using TerribleEngine.Rendering;
 using TerribleEngine.Resources;
+using TerribleEngine.Scene;
 using TerribleEngine.Threading;
 
 namespace TerribleEngine
@@ -22,7 +23,7 @@ namespace TerribleEngine
         public ResourceManager ResourceManager { get; }
         public Renderer Renderer { get; private set; }
 
-        public World.World ActiveWorld { get; private set; }
+        public World ActiveWorld { get; private set; }
 
         public TerribleApp()
         {
@@ -33,24 +34,27 @@ namespace TerribleEngine
             Renderer = new Renderer();
 
             UpdateThread = new EngineThread(UpdateInit, Update, 60);
-            RenderThread = new EngineThread(RenderInit, Render, 30);
+            RenderThread = new EngineThread(RenderInit, Render, 120);
         }
 
         public void Init(LaunchState state, InitialiseSettings settings)
         {
             LaunchState = state;
             Settings = settings;
+            ActiveWorld = new World();
 
             Settings.Context.MakeCurrent(null);
             SystemManager.LoadSystems(new CoreSystemLoader());
-            SystemManager.InitialiseSystems(EntityManager, EventManager, ResourceManager);
+            EntityManager.RegisterSystem(Renderer);
+
+            SystemManager.InitialiseSystems(EntityManager, EventManager, ResourceManager, ActiveWorld);
 
             UpdateThread.Start();
             RenderThread.Start();
 
         }
 
-        public void LoadScene(World.World world)
+        public void LoadScene(World world)
         {
             ActiveWorld = world;
         }
@@ -61,7 +65,7 @@ namespace TerribleEngine
 
         private void Update()
         {
-            SystemManager.UpdateSystems();
+            SystemManager.UpdateSystems((float) UpdateThread.Timer.ElapsedFrameTime / 1000);
             EventManager.Update();
         }
 
@@ -78,6 +82,7 @@ namespace TerribleEngine
 
         private void Render()
         {
+            Renderer.Update((float) RenderThread.Timer.ElapsedFrameTime / 1000);
             Renderer.Render(Settings.Context);
         }
 

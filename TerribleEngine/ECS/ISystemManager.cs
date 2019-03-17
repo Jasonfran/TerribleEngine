@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TerribleEngine.Resources;
+using TerribleEngine.Scene;
 
 namespace TerribleEngine.ECS
 {
@@ -8,7 +9,7 @@ namespace TerribleEngine.ECS
         void ExitSystems();
         void LoadSystems(ISystemLoader systemLoader);
         List<ITerribleSystem> SystemsWhichSatisfy(ComponentSet componentSet);
-        void UpdateSystems();
-        void InitialiseSystems(EntityManager entityManager, EventManager eventManager, IResourceManager resourceManager);
+        void UpdateSystems(float dt);
+        void InitialiseSystems(EntityManager entityManager, EventManager eventManager, IResourceManager resourceManager, IWorld world);
     }
 }

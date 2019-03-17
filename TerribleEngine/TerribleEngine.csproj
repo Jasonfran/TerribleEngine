@@ -94,6 +94,9 @@
   <ItemGroup>
     <Compile Include="Attributes\DependsOnComponents.cs" />
     <Compile Include="ComponentModels\Renderable.cs" />
+    <Compile Include="ECS\EntityCollectionUpdate.cs" />
+    <Compile Include="ECS\IEntity.cs" />
+    <Compile Include="ECS\IEntityParent.cs" />
     <Compile Include="ECS\Transform.cs" />
     <Compile Include="ComponentSet.cs" />
     <Compile Include="ECS\CoreSystemLoader.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="ECS\ISystemLoaderCallback.cs" />
     <Compile Include="ECS\ISystemManager.cs" />
     <Compile Include="ECS\ITerribleSystem.cs" />
+    <Compile Include="Enums\EntityCollectionChange.cs" />
     <Compile Include="Events\TestEvent.cs" />
     <Compile Include="Gameplay\TestSystem.cs" />
     <Compile Include="Events\IEvent.cs" />
@@ -110,7 +114,7 @@
     <Compile Include="Rendering\ArrayBuffer.cs" />
     <Compile Include="Rendering\VertexDataPointer.cs" />
     <Compile Include="Resources\IResourceManager.cs" />
-    <Compile Include="World\IWorld.cs" />
+    <Compile Include="Scene\IWorld.cs" />
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Resources\Material.cs" />
     <Compile Include="Resources\Mesh.cs" />
@@ -119,7 +123,7 @@
     <Compile Include="Resources\Shader.cs" />
     <Compile Include="Resources\Texture2D.cs" />
     <Compile Include="Resources\Vertex.cs" />
-    <Compile Include="World\World.cs" />
+    <Compile Include="Scene\World.cs" />
     <Compile Include="ECS\SystemManager.cs" />
     <Compile Include="Threading\EngineThread.cs" />
     <Compile Include="Timing\BasicTimer.cs" />
@@ -132,11 +136,10 @@
     <Compile Include="ECS\Entity.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Engine.cs" />
     <Compile Include="TerribleApp.cs" />
     <Compile Include="Timing\ThrottledTimer.cs" />
     <Compile Include="WindowManager.cs" />
-    <Compile Include="World\WorldRoot.cs" />
+    <Compile Include="Scene\WorldRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

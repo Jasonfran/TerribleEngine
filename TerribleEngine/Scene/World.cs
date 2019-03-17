@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using TerribleEngine.ECS;
 
-namespace TerribleEngine.World
+namespace TerribleEngine.Scene
 {
     public class World : IWorld
     {
-        public List<Entity> Entities { get; }
+        public WorldRoot WorldRoot { get; }
     }
 }

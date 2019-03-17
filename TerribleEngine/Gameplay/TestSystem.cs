@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTK;
 using TerribleEngine.Attributes;
 using TerribleEngine.ComponentModels;
 using TerribleEngine.ECS;
@@ -8,29 +9,33 @@ using TerribleEngine.Events;
 namespace TerribleEngine.Gameplay
 {
 
-    [DependsOnComponents(typeof(Transform), typeof(Renderable))]
+    //[DependsOnComponents(typeof(Transform), typeof(Renderable))]
     public class TestSystem : TerribleSystem
     {
+        private Entity testEntity;
+        private float step = 0.0f;
+
         public override void OnInit()
         {
             base.OnInit();
             Console.WriteLine("Test System init");
-            EventManager.RegisterEventListener<TestEvent>(TestEventHandler);
-        }
 
-        private void TestEventHandler(object obj)
-        {
-            if (obj is TestEvent e)
+            testEntity = EntityManager.NewEntity();
+            testEntity.AddComponent(new Renderable()
             {
-                //Console.WriteLine(e.Message);
-            }
+                Material = null,
+                Model = ResourceManager.LoadModel("Models/cube.obj")
+            });
         }
 
-        public override void Update()
+        public override void Update(float dt)
         {
-            base.Update();
-            EventManager.RaiseEvent(new TestEvent("test1", "test2"));
-            //Console.WriteLine("Raised event!");
+            base.Update(dt);
+
+            step += dt;
+
+            testEntity.Transform.Position = new Vector3((float)Math.Sin(step) * 6.0f, 0.0f, 0.0f);
+            Console.WriteLine(dt);
 
         }
 

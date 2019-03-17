@@ -17,6 +17,8 @@ namespace TerribleEngine.Rendering
         public int Width { get; private set; }
         public int Height { get; private set; }
 
+        private bool _resized = false;
+
         private Color4 clearColor = Color4.Black;
 
         private Model testModel;
@@ -45,7 +47,7 @@ namespace TerribleEngine.Rendering
             GL.CullFace(CullFaceMode.Back);
 
             testModel = ResourceManager.LoadModel(
-                @"C:\Users\jason\Source\Repos\CSharpRenderingEngine\CSharpRenderingEngine\Assets\Models\cube.obj");
+                @"Models/cube.obj");
 
             testShader = ResourceManager.LoadShader("Shaders/Main.vert", "Shaders/Main.frag");
 
@@ -92,50 +94,54 @@ namespace TerribleEngine.Rendering
                 indexOffset += indexCount;
             }
 
-
             VBO.Unbind();
-
         }
 
         public void Resize(int width, int height)
         {
-            GL.Viewport(0, 0, width, height);
-            Console.WriteLine($"Resizing to Width: {width}px Height {height}px");
+            Width = width;
+            Height = height;
+            _resized = true;
         }
 
         public void Render(IGraphicsContext context)
         {
+            if (_resized)
+            {
+                GL.Viewport(0, 0, Width, Height);
+                Console.WriteLine($"Resizing to Width: {Width}px Height {Height}px");
+                _resized = false;
+            }
+
             GL.ClearColor(clearColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.BindVertexArray(VAO);
-            VBO.Bind();
 
             testShader.Use();
-            var model = Matrix4.Identity;
             var view = Matrix4.CreateTranslation(0.0f, 0.0f, -10.0f);
             var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(75.0f),
                 (float)Width / (float)Height, 1.0f, 1000.0f);
 
-            testShader.SetMat4("model", model);
             testShader.SetMat4("view", view);
             testShader.SetMat4("projection", projection);
-            testShader.SetMat4("mvp", model * view * projection);
-
-            //foreach (var mesh in testModel.Meshes)
-            //{
-            //    var dataPointer = _vertexDataPointers[mesh];
-            //    GL.DrawElementsBaseVertex(PrimitiveType.Triangles, dataPointer.Count, DrawElementsType.UnsignedInt, IntPtr.Zero, dataPointer.Start);
-            //}
 
             foreach (var entity in Entities)
             {
+                var renderable = entity.GetComponent<Renderable>();
+                var model = Matrix4.CreateTranslation(entity.Transform.Position);
+                testShader.SetMat4("model", model);
+                testShader.SetMat4("mvp", model * view * projection);
 
+                foreach (var mesh in renderable.Model.Meshes)
+                {
+                    var pointer = _vertexDataPointers[mesh];
+                    GL.DrawElementsBaseVertex(PrimitiveType.Triangles, pointer.Count, DrawElementsType.UnsignedInt, IntPtr.Zero, pointer.Start);
+                }
             }
 
             context.SwapBuffers();
             GL.BindVertexArray(0);
-            VBO.Unbind();
         }
     }
 }
