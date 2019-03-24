@@ -1,6 +1,8 @@
-﻿using OpenTK.Graphics;
+﻿using System;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using TerribleEngine.ECS;
+using TerribleEngine.EditorHelpers;
 using TerribleEngine.Enums;
 using TerribleEngine.Rendering;
 using TerribleEngine.Resources;
@@ -23,15 +25,20 @@ namespace TerribleEngine
         public ResourceManager ResourceManager { get; }
         public Renderer Renderer { get; private set; }
 
+        public EngineInterface EngineInterface { get; }
+
         public World ActiveWorld { get; private set; }
 
         public TerribleApp()
         {
             SystemManager = new SystemManager();
-            EntityManager = new EntityManager(SystemManager);
             EventManager = new EventManager();
+            EntityManager = new EntityManager(SystemManager, EventManager);
             ResourceManager = new ResourceManager();
             Renderer = new Renderer();
+
+            EngineInterface = new EngineInterface(EventManager);
+            EngineInterface.RegisterEvents();
 
             UpdateThread = new EngineThread(UpdateInit, Update, 60);
             RenderThread = new EngineThread(RenderInit, Render, 120);
@@ -57,6 +64,11 @@ namespace TerribleEngine
         public void LoadScene(World world)
         {
             ActiveWorld = world;
+        }
+
+        public float GetFramerate()
+        {
+            return 1000.0f / (float) RenderThread.Timer.ElapsedFrameTime;
         }
 
         private void UpdateInit()

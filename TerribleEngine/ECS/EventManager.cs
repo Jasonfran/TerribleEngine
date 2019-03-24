@@ -6,7 +6,7 @@ using TerribleEngine.Events;
 namespace TerribleEngine.ECS
 {
 
-    public class EventManager
+    public class EventManager : IEventManager
     {
         private Dictionary<Type, List<Action<object>>> _eventHandlers;
 

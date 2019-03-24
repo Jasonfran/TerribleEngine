@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using TerribleEngine.ComponentModels;
+using TerribleEngine;
 using TerribleEngine.ECS;
 
-namespace TerribleEngine.UnitTests
+namespace UnitTests
 {
     [TestFixture]
     public class EntityManagerTests
@@ -18,11 +18,14 @@ namespace TerribleEngine.UnitTests
 
         protected ISystemManager SystemManager { get; set; }
 
+        protected IEventManager EventManager { get; set; }
+
         [SetUp]
         public void Setup()
         {
             SystemManager = Mock.Of<ISystemManager>();
-            EntityManager = new EntityManager(SystemManager);
+            EventManager = Mock.Of<IEventManager>();
+            EntityManager = new EntityManager(SystemManager, EventManager);
 
             Mock.Get(SystemManager).Setup(x => x.SystemsWhichSatisfy(It.IsAny<ComponentSet>()))
                 .Returns(new List<ITerribleSystem>());

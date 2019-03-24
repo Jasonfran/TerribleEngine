@@ -97,6 +97,7 @@
     <Compile Include="ECS\EntityCollectionUpdate.cs" />
     <Compile Include="ECS\IEntity.cs" />
     <Compile Include="ECS\IEntityParent.cs" />
+    <Compile Include="ECS\IEventManager.cs" />
     <Compile Include="ECS\Transform.cs" />
     <Compile Include="ComponentSet.cs" />
     <Compile Include="ECS\CoreSystemLoader.cs" />
@@ -105,8 +106,17 @@
     <Compile Include="ECS\ISystemLoaderCallback.cs" />
     <Compile Include="ECS\ISystemManager.cs" />
     <Compile Include="ECS\ITerribleSystem.cs" />
+    <Compile Include="EditorHelpers\Commands\EntityParentedCommand.cs" />
+    <Compile Include="EditorHelpers\Commands\EntityParentedCommandParams.cs" />
+    <Compile Include="EditorHelpers\EngineInterface.cs" />
+    <Compile Include="EditorHelpers\Commands\EntityCreatedCommand.cs" />
+    <Compile Include="EditorHelpers\Commands\EntityCreatedCommandParams.cs" />
+    <Compile Include="EditorHelpers\Interfaces\ICommand.cs" />
+    <Compile Include="EditorHelpers\Interfaces\IEditorEntityManager.cs" />
+    <Compile Include="EditorHelpers\Interfaces\IEditorInterface.cs" />
     <Compile Include="Enums\EntityCollectionChange.cs" />
-    <Compile Include="Events\TestEvent.cs" />
+    <Compile Include="Events\EntityCreatedEvent.cs" />
+    <Compile Include="Events\EntityParentedEvent.cs" />
     <Compile Include="Gameplay\TestSystem.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="InitialiseSettings.cs" />
@@ -146,9 +156,7 @@
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Object\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AssimpNet.4.1.0\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

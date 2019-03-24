@@ -128,6 +128,8 @@ namespace TerribleEngine.Rendering
 
             foreach (var entity in Entities)
             {
+                if(entity.World == null) continue;
+                
                 var renderable = entity.GetComponent<Renderable>();
                 var model = Matrix4.CreateTranslation(entity.Transform.Position);
                 testShader.SetMat4("model", model);

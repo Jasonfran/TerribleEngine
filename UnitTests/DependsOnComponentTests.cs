@@ -1,9 +1,8 @@
 using NUnit.Framework;
 using TerribleEngine.Attributes;
-using TerribleEngine.ComponentModels;
 using TerribleEngine.ECS;
 
-namespace TerribleEngine.UnitTests
+namespace UnitTests
 {
     [TestFixture]
     public class DependsOnComponentTests

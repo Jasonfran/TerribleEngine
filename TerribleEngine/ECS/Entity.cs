@@ -4,12 +4,12 @@ using TerribleEngine.Scene;
 
 namespace TerribleEngine.ECS
 {
-    public class Entity : IEntity, IEntityParent
+    public class Entity : IEntity
     {
         public int Id { get; }
         public ComponentSet ComponentSet { get; internal set; }
         public List<IEntity> Children { get; }
-        public IEntityParent Parent { get; private set; }
+        public IEntity Parent { get; set; }
         public Transform Transform { get; set; }
         public IWorld World { get; private set; }
 
@@ -32,15 +32,13 @@ namespace TerribleEngine.ECS
 
         public T AddChild<T>(T entity) where T : IEntity
         {
-            Children.Add(entity);
-            entity.SetParent(this);
-            entity.SetWorld(World);
+            EntityManager.ChangeParent(this, entity);
             return entity;
         }
 
-        public void SetParent(IEntityParent parent)
+        public void SetParent(IEntity parent)
         {
-            Parent = parent;
+            EntityManager.ChangeParent(parent, this);
         }
 
         public void SetWorld(IWorld world)

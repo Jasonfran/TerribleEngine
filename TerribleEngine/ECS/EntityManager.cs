@@ -5,12 +5,14 @@ using System.Linq;
 using TerribleEngine.Attributes;
 using TerribleEngine.ComponentModels;
 using TerribleEngine.Enums;
+using TerribleEngine.Events;
 
 namespace TerribleEngine.ECS
 {
     public class EntityManager
     {
         private readonly ISystemManager _systemManager;
+        private readonly IEventManager _eventManager;
 
         // Used to store a reference to all entities
         private readonly List<Entity> _allEntities;
@@ -28,9 +30,10 @@ namespace TerribleEngine.ECS
 
         private int _entityIdCounter;
         
-        public EntityManager(ISystemManager systemManager)
+        public EntityManager(ISystemManager systemManager, IEventManager eventManager)
         {
             _systemManager = systemManager;
+            _eventManager = eventManager;
             _allEntities = new List<Entity>();
             _entitiesWithComponentSet = new ConcurrentDictionary<ComponentSet, List<Entity>>();
             _entitiesWithComponent = new ConcurrentDictionary<Type, List<Entity>>();
@@ -59,7 +62,18 @@ namespace TerribleEngine.ECS
                 _entityComponents.TryAdd(entity, new Dictionary<Type, IComponent>());
             }
 
+            _eventManager.RaiseEvent(new EntityCreatedEvent(entity, null));
+
             return entity;
+        }
+
+        public void ChangeParent(IEntity parent, IEntity child)
+        {
+            child.Parent?.Children.Remove(child);
+            parent.Children.Add(child);
+            child.Parent = parent;
+
+            _eventManager.RaiseEvent(new EntityParentedEvent(parent, child));
         }
 
         public T AddComponent<T>(Entity entity, T component) where T : IComponent

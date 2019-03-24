@@ -13,6 +13,7 @@ namespace TerribleEngine.Gameplay
     public class TestSystem : TerribleSystem
     {
         private Entity testEntity;
+        private Entity testEntity2;
         private float step = 0.0f;
 
         public override void OnInit()
@@ -26,6 +27,18 @@ namespace TerribleEngine.Gameplay
                 Material = null,
                 Model = ResourceManager.LoadModel("Models/cube.obj")
             });
+
+            World.AddChild(testEntity);
+
+
+            testEntity2 = EntityManager.NewEntity();
+            testEntity2.AddComponent(new Renderable()
+            {
+                Material = null,
+                Model = ResourceManager.LoadModel("Models/cube.obj")
+            });
+
+            testEntity.AddChild(testEntity2);
         }
 
         public override void Update(float dt)
@@ -35,8 +48,6 @@ namespace TerribleEngine.Gameplay
             step += dt;
 
             testEntity.Transform.Position = new Vector3((float)Math.Sin(step) * 6.0f, 0.0f, 0.0f);
-            Console.WriteLine(dt);
-
         }
 
         public override void OnExit()

@@ -6,6 +6,7 @@ namespace TerribleEngine.Timing
     public class ThrottledTimer : BasicTimer
     {
         public double SleptTime { get; private set; }
+        public double Framerate { get; private set; }
         private double accumulatedSleepError;
 
         private int updateRate = 60;
@@ -63,6 +64,8 @@ namespace TerribleEngine.Timing
                     accumulatedSleepError = -spareTime;
                 }
             }
+
+            Framerate = 1000.0f / ElapsedFrameTime;
         }
     }
 }

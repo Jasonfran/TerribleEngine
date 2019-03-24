@@ -40,6 +40,11 @@ namespace TerribleEngine.Threading
             Timer.Tick();
         }
 
+        public double GetFramerate()
+        {
+            return Timer.Framerate;
+        }
+
         public void Start()
         {
             Thread.Start();

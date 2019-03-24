@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using TerribleEngine.Attributes;
+using TerribleEngine;
 using TerribleEngine.ComponentModels;
 using TerribleEngine.ECS;
 
-namespace TerribleEngine.UnitTests
+namespace UnitTests
 {
     [TestFixture]
     public class ComponentSetTests
