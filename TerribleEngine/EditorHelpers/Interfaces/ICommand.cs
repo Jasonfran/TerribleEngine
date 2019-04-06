@@ -4,4 +4,9 @@
     {
         void Execute();
     }
+
+    public interface ICommand<TArgs> : ICommand
+    {
+        TArgs Args { get; }
+    }
 }

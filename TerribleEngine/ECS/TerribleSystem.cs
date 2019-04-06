@@ -10,7 +10,7 @@ namespace TerribleEngine.ECS
 {
     public abstract class TerribleSystem : ITerribleSystem
     {
-        public List<Entity> Entities { get; }
+        public List<IEntity> Entities { get; }
         private ConcurrentQueue<EntityCollectionUpdate> _collectionUpdates;
 
         public EntityManager EntityManager { get; set; }
@@ -20,7 +20,7 @@ namespace TerribleEngine.ECS
 
         protected TerribleSystem()
         {
-            Entities = new List<Entity>();
+            Entities = new List<IEntity>();
             _collectionUpdates = new ConcurrentQueue<EntityCollectionUpdate>();
         }
 
@@ -52,7 +52,7 @@ namespace TerribleEngine.ECS
             return attribute ?? new DependsOnComponents();
         }
 
-        internal void CollectionUpdate(Entity entity, EntityCollectionChange change)
+        internal void CollectionUpdate(IEntity entity, EntityCollectionChange change)
         {
             _collectionUpdates.Enqueue(new EntityCollectionUpdate(entity, change));
         }

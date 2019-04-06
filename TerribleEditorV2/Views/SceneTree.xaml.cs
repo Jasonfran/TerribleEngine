@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using TerribleEditorV2.Controller;
 using TerribleEditorV2.Models;
+using TerribleEditorV2.Models.SceneTree;
 using TerribleEngine.ECS;
 
 namespace TerribleEditorV2.Views

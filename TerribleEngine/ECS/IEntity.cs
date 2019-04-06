@@ -5,8 +5,7 @@ namespace TerribleEngine.ECS
 {
     public interface IEntity : IEntityParent
     {
-        List<IEntity> Children { get; }
-        ComponentSet ComponentSet { get; }
+        ComponentSet ComponentSet { get; set; }
         int Id { get; }
         Transform Transform { get; set; }
         IWorld World { get; }
@@ -16,6 +15,7 @@ namespace TerribleEngine.ECS
         void SetWorld(IWorld world);
         T AddComponent<T>(T component) where T : IComponent;
         T GetComponent<T>() where T : IComponent;
+        List<IComponent> GetAllComponents();
         bool HasComponent<T>() where T : IComponent;
         void RemoveComponent<T>() where T : IComponent;
     }

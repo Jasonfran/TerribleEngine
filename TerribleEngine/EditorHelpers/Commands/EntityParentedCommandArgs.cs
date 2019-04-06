@@ -2,13 +2,13 @@
 
 namespace TerribleEngine.EditorHelpers.Commands
 {
-    public class EntityParentedCommandParams
+    public class EntityParentedCommandArgs
     {
         public IEntity Parent { get; }
 
         public IEntity Child { get; }
 
-        public EntityParentedCommandParams(IEntity parent, IEntity child)
+        public EntityParentedCommandArgs(IEntity parent, IEntity child)
         {
             Parent = parent;
             Child = child;

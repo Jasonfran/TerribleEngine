@@ -7,7 +7,7 @@ namespace TerribleEngine.ECS
     public class Entity : IEntity
     {
         public int Id { get; }
-        public ComponentSet ComponentSet { get; internal set; }
+        public ComponentSet ComponentSet { get; set; }
         public List<IEntity> Children { get; }
         public IEntity Parent { get; set; }
         public Transform Transform { get; set; }
@@ -54,6 +54,11 @@ namespace TerribleEngine.ECS
         public T GetComponent<T>() where T : IComponent
         {
             return EntityManager.GetComponent<T>(this);
+        }
+
+        public List<IComponent> GetAllComponents()
+        {
+            return EntityManager.GetAllComponents(this);
         }
 
         public void RemoveComponent<T>() where T : IComponent

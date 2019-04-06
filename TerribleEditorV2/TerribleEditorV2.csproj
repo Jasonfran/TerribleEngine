@@ -78,8 +78,9 @@
     <Compile Include="EngineHelpers\EditorEntityManager.cs" />
     <Compile Include="Controller\SceneTreeController.cs" />
     <Compile Include="EngineHelpers\EditorInterface.cs" />
-    <Compile Include="Models\EntityNodeViewModel.cs" />
-    <Compile Include="Models\SceneTreeViewModel.cs" />
+    <Compile Include="Models\SceneTree\ComponentNodeViewModel.cs" />
+    <Compile Include="Models\SceneTree\EntityNodeViewModel.cs" />
+    <Compile Include="Models\SceneTree\SceneTreeViewModel.cs" />
     <Compile Include="Views\SceneTree.xaml.cs">
       <DependentUpon>SceneTree.xaml</DependentUpon>
     </Compile>

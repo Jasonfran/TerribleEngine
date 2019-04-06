@@ -1,4 +1,5 @@
 ﻿using TerribleEditorV2.Models;
+using TerribleEditorV2.Models.SceneTree;
 using TerribleEngine.ECS;
 
 namespace TerribleEditorV2.Controller

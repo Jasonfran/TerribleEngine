@@ -68,7 +68,7 @@ namespace UnitTests
         [Test]
         public void EntityIsAddedToSystems()
         {
-            var system = Mock.Of<ITerribleSystem>(x=>x.Entities == new List<Entity>());
+            var system = Mock.Of<ITerribleSystem>(x=>x.Entities == new List<IEntity>());
 
             Mock.Get(SystemManager).Setup(x => x.SystemsWhichSatisfy(It.IsAny<ComponentSet>()))
                 .Returns(new List<ITerribleSystem> {system});
@@ -82,7 +82,7 @@ namespace UnitTests
         [Test]
         public void EntityIsRemovedFromSystems()
         {
-            var system = Mock.Of<ITerribleSystem>(x => x.Entities == new List<Entity>());
+            var system = Mock.Of<ITerribleSystem>(x => x.Entities == new List<IEntity>());
 
             Mock.Get(SystemManager).Setup(x => x.SystemsWhichSatisfy(It.IsAny<ComponentSet>()))
                 .Returns(new List<ITerribleSystem> { system });

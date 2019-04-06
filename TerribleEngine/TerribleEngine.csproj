@@ -107,10 +107,10 @@
     <Compile Include="ECS\ISystemManager.cs" />
     <Compile Include="ECS\ITerribleSystem.cs" />
     <Compile Include="EditorHelpers\Commands\EntityParentedCommand.cs" />
-    <Compile Include="EditorHelpers\Commands\EntityParentedCommandParams.cs" />
+    <Compile Include="EditorHelpers\Commands\EntityParentedCommandArgs.cs" />
     <Compile Include="EditorHelpers\EngineInterface.cs" />
     <Compile Include="EditorHelpers\Commands\EntityCreatedCommand.cs" />
-    <Compile Include="EditorHelpers\Commands\EntityCreatedCommandParams.cs" />
+    <Compile Include="EditorHelpers\Commands\EntityCreatedCommandArgs.cs" />
     <Compile Include="EditorHelpers\Interfaces\ICommand.cs" />
     <Compile Include="EditorHelpers\Interfaces\IEditorEntityManager.cs" />
     <Compile Include="EditorHelpers\Interfaces\IEditorInterface.cs" />

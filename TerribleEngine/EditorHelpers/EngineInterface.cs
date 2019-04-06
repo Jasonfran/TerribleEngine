@@ -37,7 +37,7 @@ namespace TerribleEngine.EditorHelpers
             if (args is EntityCreatedEvent eventArgs)
             {
                 var command =
-                    new EntityCreatedCommand(new EntityCreatedCommandParams(eventArgs.Entity), EditorInterface);
+                    new EntityCreatedCommand(new EntityCreatedCommandArgs(eventArgs.Entity), EditorInterface);
                 SendCommand(command);
             }
         }
@@ -46,7 +46,7 @@ namespace TerribleEngine.EditorHelpers
         {
             if (args is EntityParentedEvent eventArgs)
             {
-                var command = new EntityParentedCommand(new EntityParentedCommandParams(eventArgs.Parent, eventArgs.Child), EditorInterface);
+                var command = new EntityParentedCommand(new EntityParentedCommandArgs(eventArgs.Parent, eventArgs.Child), EditorInterface);
                 SendCommand(command);
             }
         }

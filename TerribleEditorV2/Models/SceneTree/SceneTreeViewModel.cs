@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using TerribleEditorV2.Controller;
-using TerribleEngine.ECS;
 
-namespace TerribleEditorV2.Models
+namespace TerribleEditorV2.Models.SceneTree
 {
     public class SceneTreeViewModel
     {

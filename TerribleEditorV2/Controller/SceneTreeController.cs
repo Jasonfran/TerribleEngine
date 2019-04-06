@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Web.ModelBinding;
 using System.Windows.Data;
 using TerribleEditorV2.Models;
+using TerribleEditorV2.Models.SceneTree;
 using TerribleEngine.ECS;
 
 namespace TerribleEditorV2.Controller
@@ -19,12 +20,16 @@ namespace TerribleEditorV2.Controller
             EntityToViewModel = new ConcurrentDictionary<IEntity, EntityNodeViewModel>();
 
             Model = new SceneTreeViewModel();
-            BindingOperations.EnableCollectionSynchronization(Model.Entities, _entityCollectionLock);
         }
 
         public void AddEntity(IEntity entity)
         {
             var viewModel = new EntityNodeViewModel(entity);
+            var components = entity.GetAllComponents();
+            foreach (var component in components)
+            {
+                viewModel.Components.Add(new ComponentNodeViewModel(component));
+            }
             EntityToViewModel.TryAdd(entity, viewModel);
             Model.Entities.Add(viewModel);
         }
@@ -32,8 +37,18 @@ namespace TerribleEditorV2.Controller
         public void AddChild(IEntity parent, IEntity child)
         {
             if (!EntityToViewModel.ContainsKey(parent)) return;
-            var viewModel = new EntityNodeViewModel(child);
-            EntityToViewModel[parent].Children.Add(viewModel);
+
+            if (EntityToViewModel.TryGetValue(child, out var existingViewModel))
+            {
+                Model.Entities.Remove(existingViewModel);
+                EntityToViewModel[parent].Entities.Add(existingViewModel);
+            }
+            else
+            {
+                var viewModel = new EntityNodeViewModel(child);
+                EntityToViewModel[parent].Entities.Add(viewModel);
+            }
+            
         }
     }
 }

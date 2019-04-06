@@ -3,23 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TerribleEditorV2.Views"
-             xmlns:models="clr-namespace:TerribleEditorV2.Models"
-             xmlns:controller="clr-namespace:TerribleEditorV2.Controller"
+             xmlns:sceneTree="clr-namespace:TerribleEditorV2.Models.SceneTree"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <TreeView ItemsSource="{Binding Entities}">
+        <TreeView>
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type models:SceneTreeViewModel}" ItemsSource="{Binding Entities}">
-                    <Label Content="{Binding Id}" />
+                <HierarchicalDataTemplate DataType="{x:Type sceneTree:EntityNodeViewModel}" ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Id, StringFormat=Entity {0}}" >
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add new Entity" />
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
                 </HierarchicalDataTemplate>
 
-                <HierarchicalDataTemplate DataType="{x:Type models:EntityNodeViewModel}" ItemsSource="{Binding Children}">
-                    <Label Content="{Binding Id}" />
-                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type sceneTree:ComponentNodeViewModel}">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
             </TreeView.Resources>
+            <TreeViewItem ItemsSource="{Binding Entities}" Header="Scene Tree" IsExpanded="True" />
         </TreeView>
     </Grid>
 </UserControl>

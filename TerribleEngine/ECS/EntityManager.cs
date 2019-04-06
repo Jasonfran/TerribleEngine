@@ -15,16 +15,16 @@ namespace TerribleEngine.ECS
         private readonly IEventManager _eventManager;
 
         // Used to store a reference to all entities
-        private readonly List<Entity> _allEntities;
+        private readonly List<IEntity> _allEntities;
 
         // Used to group entities together by common sets
-        private readonly ConcurrentDictionary<ComponentSet, List<Entity>> _entitiesWithComponentSet;
+        private readonly ConcurrentDictionary<ComponentSet, List<IEntity>> _entitiesWithComponentSet;
 
         // All entities with one component
-        private readonly ConcurrentDictionary<Type, List<Entity>> _entitiesWithComponent;
+        private readonly ConcurrentDictionary<Type, List<IEntity>> _entitiesWithComponent;
 
         // Entity to component mapping
-        private readonly ConcurrentDictionary<Entity, Dictionary<Type, IComponent>> _entityComponents;
+        private readonly ConcurrentDictionary<IEntity, Dictionary<Type, IComponent>> _entityComponents;
 
         private readonly Dictionary<DependsOnComponents, List<ITerribleSystem>> _systemsToNotify;
 
@@ -34,10 +34,10 @@ namespace TerribleEngine.ECS
         {
             _systemManager = systemManager;
             _eventManager = eventManager;
-            _allEntities = new List<Entity>();
-            _entitiesWithComponentSet = new ConcurrentDictionary<ComponentSet, List<Entity>>();
-            _entitiesWithComponent = new ConcurrentDictionary<Type, List<Entity>>();
-            _entityComponents = new ConcurrentDictionary<Entity, Dictionary<Type, IComponent>>();
+            _allEntities = new List<IEntity>();
+            _entitiesWithComponentSet = new ConcurrentDictionary<ComponentSet, List<IEntity>>();
+            _entitiesWithComponent = new ConcurrentDictionary<Type, List<IEntity>>();
+            _entityComponents = new ConcurrentDictionary<IEntity, Dictionary<Type, IComponent>>();
 
             _systemsToNotify = new Dictionary<DependsOnComponents, List<ITerribleSystem>>();
         }
@@ -52,7 +52,7 @@ namespace TerribleEngine.ECS
 
             if (!_entitiesWithComponentSet.ContainsKey(entity.ComponentSet))
             {
-                _entitiesWithComponentSet.TryAdd(entity.ComponentSet, new List<Entity>());
+                _entitiesWithComponentSet.TryAdd(entity.ComponentSet, new List<IEntity>());
             }
 
             _entitiesWithComponentSet[entity.ComponentSet].Add(entity);
@@ -76,13 +76,13 @@ namespace TerribleEngine.ECS
             _eventManager.RaiseEvent(new EntityParentedEvent(parent, child));
         }
 
-        public T AddComponent<T>(Entity entity, T component) where T : IComponent
+        public T AddComponent<T>(IEntity entity, T component) where T : IComponent
         {   
             TryAddComponent(entity, component);   
             return component;
         }
 
-        public void RemoveComponent<T>(Entity entity) where T : IComponent 
+        public void RemoveComponent<T>(IEntity entity) where T : IComponent 
         {
             var type = typeof(T);
             var newComponentSet = new ComponentSet(entity.ComponentSet.ComponentTypes.Where(x => x != type).ToArray());
@@ -93,7 +93,7 @@ namespace TerribleEngine.ECS
             ChangeEntityComponentSet(entity, newComponentSet);
         }
 
-        public T GetComponent<T>(Entity entity) where T : IComponent
+        public T GetComponent<T>(IEntity entity) where T : IComponent
         {
             if (entity.HasComponent<T>())
             {
@@ -103,7 +103,22 @@ namespace TerribleEngine.ECS
             return default(T);
         }
 
-        public bool HasComponent<T>(Entity entity) where T : IComponent
+        public List<IComponent> GetAllComponents(IEntity entity)
+        {
+            var components = new List<IComponent>();
+
+            if (_entityComponents.ContainsKey(entity))
+            {
+                foreach (var kv in _entityComponents[entity])
+                {
+                    components.Add(kv.Value);
+                }
+            }
+
+            return components;
+        }
+
+        public bool HasComponent<T>(IEntity entity) where T : IComponent
         {
             var type = typeof(T);
             return entity.ComponentSet.ComponentTypes.Contains(type);
@@ -130,20 +145,20 @@ namespace TerribleEngine.ECS
             return _entityIdCounter++;
         }
 
-        private void ChangeEntityComponentSet(Entity entity, ComponentSet newComponentSet)
+        private void ChangeEntityComponentSet(IEntity entity, ComponentSet newComponentSet)
         {
             _entitiesWithComponentSet[entity.ComponentSet].Remove(entity);
 
             if (!_entitiesWithComponentSet.ContainsKey(newComponentSet))
             {
-                _entitiesWithComponentSet.TryAdd(newComponentSet, new List<Entity>());
+                _entitiesWithComponentSet.TryAdd(newComponentSet, new List<IEntity>());
             }
 
             _entitiesWithComponentSet[newComponentSet].Add(entity);
             entity.ComponentSet = newComponentSet;
         }
 
-        private void TryAddComponent<T>(Entity entity, T component) where T : IComponent
+        private void TryAddComponent<T>(IEntity entity, T component) where T : IComponent
         {
             var type = typeof(T);
             if (HasComponent<T>(entity))
@@ -153,7 +168,7 @@ namespace TerribleEngine.ECS
 
             if (!_entitiesWithComponent.ContainsKey(type))
             {
-                _entitiesWithComponent.TryAdd(type, new List<Entity>());
+                _entitiesWithComponent.TryAdd(type, new List<IEntity>());
             }
 
             _entitiesWithComponent[type].Add(entity);
@@ -177,7 +192,7 @@ namespace TerribleEngine.ECS
             return systems;
         }
 
-        private void AddToSystems(Entity entity)
+        private void AddToSystems(IEntity entity)
         {
             var systems = SystemsWhichSatisfy(entity.ComponentSet);
             foreach (var system in systems)
@@ -187,7 +202,7 @@ namespace TerribleEngine.ECS
             }
         }
 
-        private void RemoveFromSystems(Entity entity)
+        private void RemoveFromSystems(IEntity entity)
         {
             var systems = SystemsWhichSatisfy(entity.ComponentSet);
             foreach (var system in systems)

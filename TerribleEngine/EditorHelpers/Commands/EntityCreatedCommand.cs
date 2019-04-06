@@ -2,20 +2,20 @@
 
 namespace TerribleEngine.EditorHelpers.Commands
 {
-    public class EntityCreatedCommand : ICommand
+    public class EntityCreatedCommand : ICommand<EntityCreatedCommandArgs>
     {
-        private EntityCreatedCommandParams Parameters { get; }
+        public EntityCreatedCommandArgs Args { get; }
         private IEditorInterface EditorInterface { get; }
 
-        public EntityCreatedCommand(EntityCreatedCommandParams parameters, IEditorInterface editorInterface)
+        public EntityCreatedCommand(EntityCreatedCommandArgs parameters, IEditorInterface editorInterface)
         {
-            Parameters = parameters;
+            Args = parameters;
             EditorInterface = editorInterface;
         }
 
         public void Execute()
         {
-            EditorInterface.EditorEntityManager.AddEntity(Parameters.Entity);
+            EditorInterface.EditorEntityManager.AddEntity(Args.Entity);
         }
     }
 }

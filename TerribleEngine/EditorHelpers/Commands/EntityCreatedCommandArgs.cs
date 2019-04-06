@@ -2,11 +2,11 @@
 
 namespace TerribleEngine.EditorHelpers.Commands
 {
-    public class EntityCreatedCommandParams
+    public class EntityCreatedCommandArgs
     {
         public IEntity Entity { get; }
 
-        public EntityCreatedCommandParams(IEntity entity)
+        public EntityCreatedCommandArgs(IEntity entity)
         {
             Entity = entity;
         }
