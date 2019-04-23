@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using TerribleEngine.ECS;
 using TerribleEngine.EditorHelpers;
 using TerribleEngine.Enums;
+using TerribleEngine.Events.Window;
 using TerribleEngine.Rendering;
 using TerribleEngine.Resources;
 using TerribleEngine.Scene;
@@ -17,17 +18,19 @@ namespace TerribleEngine
 
         public EngineThread UpdateThread { get; set; }
         public EngineThread RenderThread { get; set; }
-        public InitialiseSettings Settings { get; private set; }
 
         public SystemManager SystemManager { get; }
         public EntityManager EntityManager { get; }
         public EventManager EventManager { get; }
         public ResourceManager ResourceManager { get; }
         public Renderer Renderer { get; private set; }
-
         public EngineInterface EngineInterface { get; }
 
         public World ActiveWorld { get; private set; }
+
+        public static InitialiseSettings Settings { get; private set; }
+        public static int ScreenWidth { get; private set; }
+        public static int ScreenHeight { get; private set; }
 
         public TerribleApp()
         {
@@ -41,7 +44,7 @@ namespace TerribleEngine
             EngineInterface.RegisterEvents();
 
             UpdateThread = new EngineThread(UpdateInit, Update, 60);
-            RenderThread = new EngineThread(RenderInit, Render, 120);
+            RenderThread = new EngineThread(RenderInit, Render, 60);
         }
 
         public void Init(LaunchState state, InitialiseSettings settings)
@@ -58,7 +61,6 @@ namespace TerribleEngine
 
             UpdateThread.Start();
             RenderThread.Start();
-
         }
 
         public void LoadScene(World world)
@@ -73,6 +75,7 @@ namespace TerribleEngine
 
         private void UpdateInit()
         {
+
         }
 
         private void Update()
@@ -89,13 +92,13 @@ namespace TerribleEngine
             Renderer.EventManager = EventManager;
             Renderer.ResourceManager = ResourceManager;
 
-            Renderer.Init(Settings.Width, Settings.Height);
+            Renderer.Init();
+            EventManager.RaiseEvent(new WindowResizeEvent(Settings.Width, Settings.Height));
         }
 
         private void Render()
         {
             Renderer.Update((float) RenderThread.Timer.ElapsedFrameTime / 1000);
-            Renderer.Render(Settings.Context);
         }
 
         public void Exit()
@@ -103,6 +106,11 @@ namespace TerribleEngine
             UpdateThread.Exit();
             RenderThread.Exit();
             SystemManager.ExitSystems();
+        }
+
+        public void ResizeWindow(int glControlWidth, int glControlHeight)
+        {
+            EventManager.RaiseEvent(new WindowResizeEvent(glControlWidth, glControlHeight));
         }
     }
 }

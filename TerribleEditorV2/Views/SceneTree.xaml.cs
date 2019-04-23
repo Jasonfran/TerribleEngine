@@ -14,7 +14,6 @@ namespace TerribleEditorV2.Views
     public partial class SceneTree : UserControl
     {
         public ISceneTreeController Controller { get; private set; }
-        public string Test { get; }
         public SceneTree()
         {
             InitializeComponent();
@@ -49,6 +48,11 @@ namespace TerribleEditorV2.Views
         {
             Controller = TerribleEditor.Container.Resolve<ISceneTreeController>();
             DataContext = Controller.Model;
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e)
+        {
+            Controller.SelectedItemChanged(e.NewValue);
         }
     }
 }

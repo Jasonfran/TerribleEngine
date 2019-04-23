@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using TerribleEngine.Events;
+using TerribleEditorV2.Events;
 
-namespace TerribleEngine.ECS
+namespace TerribleEditorV2.Services
 {
 
     public class EventManager : IEventManager
     {
         private Dictionary<Type, List<Action<object>>> _eventHandlers;
 
-        private Queue<IEvent> _events;
-
         public EventManager()
         {
             _eventHandlers = new Dictionary<Type, List<Action<object>>>();
-            _events = new Queue<IEvent>();
         }
 
         public void RegisterEventListener<T>(Action<T> handler) where T : IEvent
@@ -32,23 +28,14 @@ namespace TerribleEngine.ECS
 
         public void RaiseEvent<T>(T e) where T : IEvent
         {
-            _events.Enqueue(e);
-        }
+            var type = e.GetType();
+            _eventHandlers.TryGetValue(type, out var handlers);
 
-        public void Update()
-        {
-            while (_events.Count > 0)
+            if (handlers != null)
             {
-                var e = _events.Dequeue();
-                var type = e.GetType();
-                _eventHandlers.TryGetValue(type, out var handlers);
-
-                if (handlers != null)
+                foreach (var handler in handlers)
                 {
-                    foreach (var handler in handlers)
-                    {
-                        handler?.Invoke(e);
-                    }
+                    handler?.Invoke(e);
                 }
             }
         }

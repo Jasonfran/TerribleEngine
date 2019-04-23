@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using TerribleEngine.Attributes;
 using TerribleEngine.ComponentModels;
 using TerribleEngine.ECS;
+using TerribleEngine.Events.Window;
 using TerribleEngine.Resources;
 
 namespace TerribleEngine.Rendering
@@ -35,12 +36,12 @@ namespace TerribleEngine.Rendering
             _vertexDataPointers = new Dictionary<Mesh, VertexDataPointer>();
         }
 
-        public void Init(int width, int height)
+        protected override void OnInit()
         {
-            Width = width;
-            Height = height;
+            Width = TerribleApp.ScreenWidth;
+            Height = TerribleApp.ScreenHeight;
 
-            GL.Viewport(0, 0, width, height);
+            GL.Viewport(0, 0, Width, Height);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -95,17 +96,25 @@ namespace TerribleEngine.Rendering
             }
 
             VBO.Unbind();
+
+            TerribleApp.Settings.Context.SwapInterval = 1;
+
+            // ---- Events -----
+
+            EventManager.RegisterEventListener<WindowResizeEvent>(Resize);
         }
 
-        public void Resize(int width, int height)
+        private void Resize(WindowResizeEvent args)
         {
-            Width = width;
-            Height = height;
+            Width = args.Width;
+            Height = args.Height;
             _resized = true;
         }
 
-        public void Render(IGraphicsContext context)
+        protected override void OnUpdate(float dt)
         {
+            var context = TerribleApp.Settings.Context;
+
             if (_resized)
             {
                 GL.Viewport(0, 0, Width, Height);
@@ -144,6 +153,11 @@ namespace TerribleEngine.Rendering
 
             context.SwapBuffers();
             GL.BindVertexArray(0);
+        }
+
+        protected override void OnExit()
+        {
+
         }
     }
 }

@@ -15,8 +15,8 @@ namespace TerribleEngine.ECS
         IWorld World { get; set; }
 
         DependsOnComponents GetDependencies();
-        void OnExit();
-        void OnInit();
+        void Exit();
+        void Init();
         void Update(float dt);
     }
 }

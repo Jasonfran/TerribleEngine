@@ -74,13 +74,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controller\IPropertyViewerController.cs" />
     <Compile Include="Controller\ISceneTreeController.cs" />
+    <Compile Include="Controller\PropertyViewerController.cs" />
     <Compile Include="EngineHelpers\EditorEntityManager.cs" />
     <Compile Include="Controller\SceneTreeController.cs" />
     <Compile Include="EngineHelpers\EditorInterface.cs" />
+    <Compile Include="Events\SelectedSceneItemChanged.cs" />
+    <Compile Include="Models\PropertyViewer\PropertyViewerViewModel.cs" />
     <Compile Include="Models\SceneTree\ComponentNodeViewModel.cs" />
     <Compile Include="Models\SceneTree\EntityNodeViewModel.cs" />
     <Compile Include="Models\SceneTree\SceneTreeViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\EditorService.cs" />
+    <Compile Include="Services\EventManager.cs" />
+    <Compile Include="Services\IEditorService.cs" />
+    <Compile Include="Events\IEvent.cs" />
+    <Compile Include="Services\IEventManager.cs" />
+    <Compile Include="Views\PropertyViewer.xaml.cs">
+      <DependentUpon>PropertyViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SceneTree.xaml.cs">
       <DependentUpon>SceneTree.xaml</DependentUpon>
     </Compile>
@@ -96,6 +109,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PropertyViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SceneTree.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

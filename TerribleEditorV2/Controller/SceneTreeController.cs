@@ -2,21 +2,26 @@
 using System.Collections.ObjectModel;
 using System.Web.ModelBinding;
 using System.Windows.Data;
+using TerribleEditorV2.Events;
 using TerribleEditorV2.Models;
 using TerribleEditorV2.Models.SceneTree;
+using TerribleEditorV2.Services;
 using TerribleEngine.ECS;
+using EventManager = TerribleEditorV2.Services.EventManager;
+using IEventManager = TerribleEditorV2.Services.IEventManager;
 
 namespace TerribleEditorV2.Controller
 {
     public class SceneTreeController : ISceneTreeController
     {
-        private object _entityCollectionLock = new object();
+        private readonly IEventManager _eventManager;
         public SceneTreeViewModel Model { get; }
 
         private ConcurrentDictionary<IEntity, EntityNodeViewModel> EntityToViewModel { get; }
 
-        public SceneTreeController()
+        public SceneTreeController(IEventManager eventManager)
         {
+            _eventManager = eventManager;
             EntityToViewModel = new ConcurrentDictionary<IEntity, EntityNodeViewModel>();
 
             Model = new SceneTreeViewModel();
@@ -49,6 +54,11 @@ namespace TerribleEditorV2.Controller
                 EntityToViewModel[parent].Entities.Add(viewModel);
             }
             
+        }
+
+        public void SelectedItemChanged(object item)
+        {
+            _eventManager.RaiseEvent(new SelectedSceneItemChanged(item));
         }
     }
 }

@@ -16,9 +16,8 @@ namespace TerribleEngine.Gameplay
         private Entity testEntity2;
         private float step = 0.0f;
 
-        public override void OnInit()
+        protected override void OnInit()
         {
-            base.OnInit();
             Console.WriteLine("Test System init");
 
             testEntity = EntityManager.NewEntity();
@@ -41,18 +40,15 @@ namespace TerribleEngine.Gameplay
             testEntity.AddChild(testEntity2);
         }
 
-        public override void Update(float dt)
+        protected override void OnUpdate(float dt)
         {
-            base.Update(dt);
-
             step += dt;
 
             testEntity.Transform.Position = new Vector3((float)Math.Sin(step) * 6.0f, 0.0f, 0.0f);
         }
 
-        public override void OnExit()
+        protected override void OnExit()
         {
-            base.OnExit();
             Console.WriteLine("Test system exit");
         }
     }

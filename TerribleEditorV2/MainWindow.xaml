@@ -16,7 +16,12 @@
             </Grid>
             <DockPanel LastChildFill="True" Margin="0,0,0,0" DockPanel.Dock="Bottom">
                 <Grid Margin="0,0,0,0" Width="200" DockPanel.Dock="Left" Background="#e3f2fd">
-                    <views:SceneTree Margin="0,0,-0.32,0" />
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <views:SceneTree DockPanel.Dock="Top"/>
+                            <views:PropertyViewer DockPanel.Dock="Top"/>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Grid>
                 <Grid  Background="#e3f2fd">
                     <WindowsFormsHost x:Name="GlHost" Margin="0,0,0,0" SizeChanged="GlHost_SizeChanged">

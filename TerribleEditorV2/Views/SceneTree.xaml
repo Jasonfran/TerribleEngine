@@ -8,9 +8,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <TreeView>
+        <TreeView SelectedItemChanged="TreeView_SelectedItemChanged">
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type sceneTree:EntityNodeViewModel}" ItemsSource="{Binding Children}">
+
+                <HierarchicalDataTemplate DataType="{x:Type sceneTree:EntityNodeViewModel}" ItemsSource="{Binding Children}" >
                     <TextBlock Text="{Binding Id, StringFormat=Entity {0}}" >
                         <TextBlock.ContextMenu>
                             <ContextMenu>

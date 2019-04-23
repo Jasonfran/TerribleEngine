@@ -10,8 +10,11 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using TerribleEditorV2.Controller;
 using TerribleEditorV2.EngineHelpers;
+using TerribleEditorV2.Events;
+using TerribleEditorV2.Services;
 using TerribleEngine;
 using TerribleEngine.EditorHelpers.Interfaces;
+using EventManager = TerribleEditorV2.Services.EventManager;
 
 namespace TerribleEditorV2
 {
@@ -31,12 +34,18 @@ namespace TerribleEditorV2
             Container.Register(
                 Component.For<ISceneTreeController>()
                     .ImplementedBy<SceneTreeController>(),
-                
+
+                Component.For<IPropertyViewerController>()
+                    .ImplementedBy<PropertyViewerController>(),
+
                 Component.For<IEditorEntityManager>()
                     .ImplementedBy<EditorEntityManager>(),
 
                 Component.For<IEditorInterface>()
-                    .ImplementedBy<EditorInterface>()
+                    .ImplementedBy<EditorInterface>(),
+
+                Component.For<IEventManager>()
+                    .ImplementedBy<EventManager>()
                 );
 
             SynchronizationContext = SynchronizationContext.Current;

@@ -2,7 +2,6 @@
 using TerribleEngine.EditorHelpers.Commands;
 using TerribleEngine.EditorHelpers.Interfaces;
 using TerribleEngine.Events;
-using TerribleEngine.Scene;
 
 namespace TerribleEngine.EditorHelpers
 {
@@ -32,23 +31,16 @@ namespace TerribleEngine.EditorHelpers
             EditorInterface?.ReceiveCommand(command);
         }
 
-        private void OnEntityAdded(object args)
+        private void OnEntityAdded(EntityCreatedEvent args)
         {
-            if (args is EntityCreatedEvent eventArgs)
-            {
-                var command =
-                    new EntityCreatedCommand(new EntityCreatedCommandArgs(eventArgs.Entity), EditorInterface);
-                SendCommand(command);
-            }
+            var command = new EntityCreatedCommand(new EntityCreatedCommandArgs(args.Entity), EditorInterface);
+            SendCommand(command);
         }
 
-        private void OnEntityParented(object args)
+        private void OnEntityParented(EntityParentedEvent args)
         {
-            if (args is EntityParentedEvent eventArgs)
-            {
-                var command = new EntityParentedCommand(new EntityParentedCommandArgs(eventArgs.Parent, eventArgs.Child), EditorInterface);
-                SendCommand(command);
-            }
+            var command = new EntityParentedCommand(new EntityParentedCommandArgs(args.Parent, args.Child), EditorInterface);
+            SendCommand(command);
         }
     }
 }

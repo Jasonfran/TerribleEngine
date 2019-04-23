@@ -51,9 +51,9 @@ namespace TerribleEditorV2
 
         private void GlHost_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (_terribleApp != null && GlControl.HasValidContext)
+            if (_terribleApp != null)
             {
-                _terribleApp.Renderer.Resize(GlControl.Width, GlControl.Height);
+                _terribleApp.ResizeWindow(GlControl.Width, GlControl.Height);
             }
         }
     }

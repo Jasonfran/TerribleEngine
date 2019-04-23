@@ -9,5 +9,7 @@ namespace TerribleEditorV2.Controller
         SceneTreeViewModel Model { get; }
         void AddEntity(IEntity entity);
         void AddChild(IEntity parent, IEntity child);
+
+        void SelectedItemChanged(object item);
     }
 }

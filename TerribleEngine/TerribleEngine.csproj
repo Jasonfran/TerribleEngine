@@ -115,8 +115,9 @@
     <Compile Include="EditorHelpers\Interfaces\IEditorEntityManager.cs" />
     <Compile Include="EditorHelpers\Interfaces\IEditorInterface.cs" />
     <Compile Include="Enums\EntityCollectionChange.cs" />
-    <Compile Include="Events\EntityCreatedEvent.cs" />
-    <Compile Include="Events\EntityParentedEvent.cs" />
+    <Compile Include="Events\Entity\EntityCreatedEvent.cs" />
+    <Compile Include="Events\Entity\EntityParentedEvent.cs" />
+    <Compile Include="Events\Window\WindowResizeEvent.cs" />
     <Compile Include="Gameplay\TestSystem.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="InitialiseSettings.cs" />

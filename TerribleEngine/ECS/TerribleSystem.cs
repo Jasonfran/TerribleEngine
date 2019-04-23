@@ -26,23 +26,30 @@ namespace TerribleEngine.ECS
 
         ~TerribleSystem()
         {
+            Exit();
+        }
+
+        public void Init()
+        {
+            OnInit();
+        }
+
+
+        public void Update(float dt)
+        {
+            ProcessCollectionUpdates();
+
+            OnUpdate(dt);
+        }
+
+        public void Exit()
+        {
             OnExit();
         }
 
-        public virtual void OnInit()
-        {
-
-        }
-
-        public virtual void Update(float dt)
-        {
-            ProcessCollectionUpdates();
-        }
-
-        public virtual void OnExit()
-        {
-
-        }
+        protected abstract void OnInit();
+        protected abstract void OnUpdate(float dt);
+        protected abstract void OnExit();
 
         public DependsOnComponents GetDependencies()
         {

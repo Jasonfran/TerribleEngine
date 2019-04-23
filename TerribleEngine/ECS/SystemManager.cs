@@ -35,7 +35,7 @@ namespace TerribleEngine.ECS
                 system.World = world;
 
                 entityManager.RegisterSystem(system);
-                system.OnInit();
+                system.Init();
             }
         }
 

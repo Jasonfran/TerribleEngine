@@ -1,12 +1,12 @@
 ﻿using System;
 using TerribleEngine.Events;
+using IEvent = TerribleEditorV2.Events.IEvent;
 
-namespace TerribleEngine.ECS
+namespace TerribleEditorV2.Services
 {
     public interface IEventManager
     {
         void RaiseEvent<T>(T e) where T : IEvent;
         void RegisterEventListener<T>(Action<T> handler) where T : IEvent;
-        void Update();
     }
 }

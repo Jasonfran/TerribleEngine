@@ -35,7 +35,7 @@ namespace TerribleEngine.Timing
                     int timeToSleepFloored = (int) Math.Floor(excessFrameTime);
 
                     accumulatedSleepError += excessFrameTime - timeToSleepFloored;
-                    int accumulatedSleepErrorCompensation = (int) Math.Round(accumulatedSleepError);
+                    int accumulatedSleepErrorCompensation = (int)Math.Round(accumulatedSleepError);
 
                     // Can't sleep a negative amount of time
                     accumulatedSleepErrorCompensation =
