@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using TerribleEditorV2.Controller;
@@ -26,7 +27,10 @@ namespace TerribleEditorV2
         public static IWindsorContainer Container { get; private set; }
         public static TerribleApp TerribleApp { get; private set; }
         public static IEditorInterface EditorInterface { get; private set; }
-        public static SynchronizationContext SynchronizationContext { get; private set; }
+
+        public static event EventHandler EditorUpdate;
+
+        public static DispatcherTimer MasterTimer { get; set; }
 
         public TerribleEditor()
         {
@@ -48,8 +52,14 @@ namespace TerribleEditorV2
                     .ImplementedBy<EventManager>()
                 );
 
-            SynchronizationContext = SynchronizationContext.Current;
             TerribleApp = new TerribleApp();
+            MasterTimer = new DispatcherTimer(new TimeSpan(0, 0, 0, 0, 500), DispatcherPriority.Normal, MasterTimeTick, Current.Dispatcher);
+            MasterTimer.Start();
+        }
+
+        private void MasterTimeTick(object sender, EventArgs e)
+        {
+            EditorUpdate?.Invoke(this, e);
         }
 
         public static void CreateEngineInterface()

@@ -9,24 +9,17 @@ namespace TerribleEditorV2.Models.PropertyViewer
 {
     public class PropertyViewerViewModel : INotifyPropertyChanged
     {
-        private string _text;
+        private object _observingItem;
 
-        public string Text
+        public object ObservingItem
         {
-            get => _text;
+            get => _observingItem;
             set
             {
-                if (value == _text) return;
-                _text = value;
+                if (value == _observingItem) return;
+                _observingItem = value;
                 OnPropertyChanged();
             }
-        }
-
-        public ObservableCollection<UIElement> Controls { get; set; }
-
-        public PropertyViewerViewModel()
-        {
-            Controls = new ObservableCollection<UIElement>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -35,6 +28,11 @@ namespace TerribleEditorV2.Models.PropertyViewer
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public PropertyViewerViewModel()
+        {
+
         }
     }
 }

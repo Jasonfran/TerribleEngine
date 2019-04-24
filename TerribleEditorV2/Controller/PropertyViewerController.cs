@@ -1,7 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System.Text;
+using System.Windows.Controls;
 using TerribleEditorV2.Events;
 using TerribleEditorV2.Models.PropertyViewer;
-using TerribleEditorV2.Services;
+using TerribleEditorV2.Models.SceneTree;
+using TerribleEngine.ECS;
+using IEventManager = TerribleEditorV2.Services.IEventManager;
 
 namespace TerribleEditorV2.Controller
 {
@@ -19,10 +22,15 @@ namespace TerribleEditorV2.Controller
 
         private void SelectedItemChanged(SelectedSceneItemChanged args)
         {
-            Model.Controls.Add(new Button()
+            switch (args.Item)
             {
-                Content = args.Item.GetType().Name
-            });
+                case EntityNodeViewModel envm:
+                    Model.ObservingItem = envm.Entity.Transform;
+                    break;
+                case ComponentNodeViewModel cnvm:
+                    Model.ObservingItem = cnvm.Component;
+                    break;
+            }
         }
 
     }

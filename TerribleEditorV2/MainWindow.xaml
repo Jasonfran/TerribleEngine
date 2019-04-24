@@ -14,8 +14,8 @@
             <Grid Height="22" Margin="0,0,0.112,0" VerticalAlignment="Top" Background="#64b5f6" DockPanel.Dock="Top">
                 <TextBox Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Foreground="White" Text="Terrible Editor"/>
             </Grid>
-            <DockPanel LastChildFill="True" Margin="0,0,0,0" DockPanel.Dock="Bottom">
-                <Grid Margin="0,0,0,0" Width="200" DockPanel.Dock="Left" Background="#e3f2fd">
+            <DockPanel LastChildFill="True" Margin="0,0,0,0" DockPanel.Dock="Bottom" >
+                <Grid Margin="0,0,0,0" Width="400" DockPanel.Dock="Left" Background="#e3f2fd">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel>
                             <views:SceneTree DockPanel.Dock="Top"/>

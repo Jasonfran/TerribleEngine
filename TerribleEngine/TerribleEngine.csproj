@@ -121,6 +121,7 @@
     <Compile Include="Gameplay\TestSystem.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="InitialiseSettings.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Rendering\Buffer.cs" />
     <Compile Include="Rendering\ArrayBuffer.cs" />
     <Compile Include="Rendering\VertexDataPointer.cs" />
